@@ -1,59 +1,43 @@
 import React, { useState } from "react";
-import { fetchGitHubUsers } from "../services/githubService";
 
-const Search = () => {
+function Search({ onSearch }) {
   const [query, setQuery] = useState("");
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [location, setLocation] = useState("");
 
-  const handleSearch = async () => {
-    setError("");
-    setLoading(true);
-
-    try {
-      const results = await fetchGitHubUsers(query, 5); // minRepos = 5
-      if (results.length === 0) {
-        setError("No users found.");
-      }
-      setUsers(results);
-    } catch (e) {
-      setError("Error fetching users.");
-    } finally {
-      setLoading(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim() !== "") {
+      onSearch(query, location);
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4 bg-white rounded shadow">
       <input
         type="text"
-        placeholder="Search GitHub users"
+        placeholder="Search GitHub username"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        className="border p-2 rounded"
       />
-      <button onClick={handleSearch} disabled={loading}>
+
+      <input
+        type="text"
+        placeholder="Location (optional)"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        className="border p-2 rounded"
+      />
+
+      <button
+        type="submit"
+        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+      >
         Search
       </button>
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Show results */}
-      {users.length > 0 && (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              <a href={user.html_url} target="_blank" rel="noreferrer">
-                {user.login}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    </form>
   );
-};
+}
 
 export default Search;
 
