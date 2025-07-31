@@ -1,41 +1,63 @@
 import React, { useState } from "react";
+import { fetchGitHubUsers } from "../services/githubService";
 
 function Search({ onSearch }) {
   const [query, setQuery] = useState("");
-  const [location, setLocation] = useState("");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  // async function to handle the search
+  const handleSearch = async (e) => {
     e.preventDefault();
-    if (query.trim() !== "") {
-      onSearch(query, location);
+    if (!query) return;
+
+    setLoading(true);
+    setError("");
+    setUsers([]);
+
+    try {
+      const results = await fetchGitHubUsers(query);
+      if (results.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setUsers(results);
+        onSearch(results); // send results to parent if needed
+      }
+    } catch {
+      setError("Looks like we cant find the user");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4 bg-white rounded shadow">
-      <input
-        type="text"
-        placeholder="Search GitHub username"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="border p-2 rounded"
-      />
+    <div>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Search GitHub username"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
 
-      <input
-        type="text"
-        placeholder="Location (optional)"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        className="border p-2 rounded"
-      />
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
 
-      <button
-        type="submit"
-        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-      >
-        Search
-      </button>
-    </form>
+      {users.length > 0 && (
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              <a href={user.html_url} target="_blank" rel="noreferrer">
+                {user.login}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 
