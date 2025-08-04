@@ -19,13 +19,13 @@ function Search({ onSearch }) {
     try {
       const results = await fetchUserData(query, location);
       if (results.length === 0) {
-        setError("Looks like we cant find the user");
+        setError("Looks like we can't find the user.");
       } else {
         setUsers(results);
         onSearch(results);
       }
     } catch {
-      setError("Looks like we cant find the user");
+      setError("Looks like we can't find the user.");
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,13 @@ function Search({ onSearch }) {
           {users.map((user) => (
             <li key={user.id}>
               <a href={user.html_url} target="_blank" rel="noreferrer">
-                {user.login}
+                <img
+                  src={user.avatar_url}
+                  alt={`${user.login}'s avatar`}
+                  width="50"
+                  height="50"
+                />
+                <span>{user.login}</span>
               </a>
             </li>
           ))}
