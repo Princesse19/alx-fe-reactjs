@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import { fetchGitHubUsers } from "../services/githubService";
 
 function Search({ onSearch }) {
   const [query, setQuery] = useState("");
@@ -17,12 +17,12 @@ function Search({ onSearch }) {
     setUsers([]);
 
     try {
-      const results = await fetchUserData(query, location);
+      const results = await fetchGitHubUsers(query, location);
       if (results.length === 0) {
         setError("Looks like we cant find the user");
       } else {
         setUsers(results);
-        onSearch(results);
+        if (onSearch) onSearch(results);
       }
     } catch {
       setError("Looks like we cant find the user");
@@ -50,13 +50,18 @@ function Search({ onSearch }) {
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p>Looks like we cant find the user</p>}
+      {error && <p>{error}</p>}
 
       {users.length > 0 && (
         <ul>
           {users.map((user) => (
-            <li key={user.id}>
-              <a href={user.html_url} target="_blank" rel="noreferrer">
+            <li key={user.id} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+              <a href={user.html_url} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
+                <img
+                  src={user.avatar_url}
+                  alt={`${user.login}'s avatar`}
+                  style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
+                />
                 {user.login}
               </a>
             </li>
@@ -68,3 +73,4 @@ function Search({ onSearch }) {
 }
 
 export default Search;
+
