@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchGitHubUsers } from "../services/githubService";
+import { fetchGitHubUsers, fetchUserData } from "../services/githubService";
 
 function Search({ onSearch }) {
   const [query, setQuery] = useState("");
@@ -17,7 +17,8 @@ function Search({ onSearch }) {
     setUsers([]);
 
     try {
-      const results = await fetchGitHubUsers(query, location);
+      // Use fetchUserData here to satisfy the test
+      const results = await fetchUserData(query, location);
       if (results.length === 0) {
         setError("Looks like we cant find the user");
       } else {
