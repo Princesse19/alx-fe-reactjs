@@ -11,6 +11,11 @@ export const useRecipeStore = create(set => ({
   setSearchTerm: (term) => set({ searchTerm: term }),
   setSelectedRecipe: (recipe) => set({ selectedRecipe: recipe }),
 
+  // ✅ Add a new recipe
+  addRecipe: (recipe) => set(state => ({
+    recipes: [...state.recipes, recipe]
+  })),
+
   addFavorite: (recipeId) => set(state => ({
     favorites: [...state.favorites, recipeId]
   })),
@@ -26,4 +31,3 @@ export const useRecipeStore = create(set => ({
     return { recommendations: recommended };
   }),
 }));
-
