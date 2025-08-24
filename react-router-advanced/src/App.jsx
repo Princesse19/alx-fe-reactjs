@@ -4,10 +4,10 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import ProfileDetails from './components/ProfileDetails';
 import ProfileSettings from './components/ProfileSettings';
-import Post from './components/Post';
+import BlogPost from './components/BlogPost';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // change to false to test protection
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const ProtectedRoute = ({ children }) => {
     return isAuthenticated ? children : <Navigate to="/" />;
@@ -17,17 +17,20 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }>
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        >
           <Route path="details" element={<ProfileDetails />} />
           <Route path="settings" element={<ProfileSettings />} />
         </Route>
 
-        <Route path="/post/:id" element={<Post />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
       </Routes>
     </Router>
   );
