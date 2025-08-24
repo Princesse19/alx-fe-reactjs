@@ -8,14 +8,18 @@ function AddRecipeForm() {
   const [steps, setSteps] = useState('');
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const validate = () => {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title is required';
     if (!ingredients.trim()) validationErrors.ingredients = 'Ingredients are required';
     if (!steps.trim()) validationErrors.steps = 'Preparation steps are required';
+    return validationErrors;
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
