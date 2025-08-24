@@ -9,6 +9,8 @@ const RegistrationForm = () => {
 
   const [error, setError] = useState("");
 
+  const { username, email, password } = formData; // <-- destructure here
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -17,7 +19,7 @@ const RegistrationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
+    if (!username || !email || !password) {
       setError("All fields are required!");
       return;
     }
@@ -37,7 +39,7 @@ const RegistrationForm = () => {
           <input
             type="text"
             name="username"
-            value={formData.username}
+            value={username}  // <-- changed here
             onChange={handleChange}
           />
         </div>
@@ -47,7 +49,7 @@ const RegistrationForm = () => {
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={email}   // <-- changed here
             onChange={handleChange}
           />
         </div>
@@ -57,7 +59,7 @@ const RegistrationForm = () => {
           <input
             type="password"
             name="password"
-            value={formData.password}
+            value={password}  // <-- changed here
             onChange={handleChange}
           />
         </div>
