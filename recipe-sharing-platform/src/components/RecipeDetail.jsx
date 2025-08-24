@@ -32,10 +32,10 @@ function RecipeDetail() {
         ))}
       </ul>
 
-      <h2 className="text-2xl font-semibold text-gray-800 mb-2">Cooking Steps</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-2">Cooking Instructions</h2>
       <ol className="list-decimal list-inside space-y-2">
-        {recipe.steps?.map((step, index) => (
-          <li key={index}>{step}</li>
+        {recipe.instructions?.map((instruction, index) => (
+          <li key={index}>{instruction}</li>
         ))}
       </ol>
     </div>
